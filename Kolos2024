@@ -1,0 +1,374 @@
+Krok 1.
+Napisz klasę abstrakcyjną Clock przechowującą wewnętrznie stan zegara, posiadającą publiczne metody:
+● setCurrentTime, która ustawia czas zegara na bieżącą godzinę zgodnie z zegarem systemowym.
+● setTime, która przyjmuje trzy zmienne całkowite - godzinę, minutę i sekundę i ustawia zgodnie z nią czas
+zegara. Jeżeli dane nie są poprawne w kontekście zegara 24-godzinnego, należy rzucić wyjątek
+IllegalArgumentException i opisać przyczynę w wiadomości tego wyjątku (która ze zmiennych nie mieści się
+w jakim zakresie).
+● toString, która zwraca napis zawierający godzinę w formacie hh:mm:ss.
+Sposób przechowywania czasu w zegarze zaproponuj samodzielnie.
+Krok 2.
+Napisz klasę DigitalClock, dziedziczącą po Clock. W klasie DigitalClock
+utwórz publiczny typ wyliczeniowy pozwalający na rozróżnienie między
+zegarem 24-godzinnym i 12-godzinnym. Dodaj argument tego typu do
+konstruktora.
+Jeżeli ustawiony jest tryb 24-godzinny, metoda toString powinna wywołać
+metodę toString klasy nadrzędnej. W trybie 12-godzinnym napis powinien
+ograniczać się do 12 godzin z dopiskiem AM lub PM i nie poprzedzać
+jednocyfrowej godziny zerem. Utwórz obiekt klasy DigitalClock i przetestuj
+przypadki z sąsiedniej tabeli.
+Zapoznaj się z plikiem strefy.csv dołączonym do treści zadania. Plik zawiera
+letnie strefy czasowe wybranych miast oraz ich współrzędne geograficzne
+wyrażone stopniami kątowymi.
+12 godzin 24 godziny
+12:00:00 AM 00:00:00
+12:01:00 AM 00:01:00
+1:00:00 AM 01:00:00
+11:59:00 AM 11:59:00
+12:00:00 PM 12:00:00
+1:00:00 PM 13:00:00
+11:59:00 PM 23:59:00
+Krok 3.
+Napisz klasę City zawierającą wszystkie dane z pojedynczego wiersza pliku. Napisz w niej metody statyczne:
+● prywatną parseLine, przyjmującą pojedynczą linię pliku i zwracającą obiekt City,
+● publiczną parseFile, przyjmującą ścieżkę do tego pliku i zwracającą mapę zapełnioną danymi z pliku,
+w której kluczem jest nazwa miasta, a wartością obiekt City.
+W razie potrzeby, do każdej z danych wczytanych do obiektu City można stworzyć publiczny akcesor. Wywołaj
+metodę parseFile przekazując jej ścieżkę do przykładowego pliku.
+Krok 4.
+W klasie Clock dodaj prywatne pole City. Zmodyfikuj konstruktor tak, aby przyjmował referencję na obiekt City
+i ustawiał ją w tym polu. W klasie Clock napisz publiczną metodę:
+● setCity, która przyjmie referencję na obiekt City i zastąpi w obiekcie Clock dotychczasową referencję na City.
+Zmiana miasta powinna spowodować zmianę wskazywanej godziny (np. zmiana Warszawy na Kijów powinna
+zwiększyć godzinę o 1 lub ewentualnie z 23 na 0). Wywołaj metodę setCity.
+Krok 5.
+W klasie City napisz publiczną metodę:
+● localMeanTime, która przyjmie czas zgodny ze swoją strefą czasową i zwróci czas miejscowy obliczony na
+podstawie długości geograficznej.
+Długość geograficzna przyjmuje wartości od -180 do +180 stopni, a odpowiadające jej przesunięcie godzinowe
+wartości od -12 do +12 godzin. Przesunięcie czasu zmienia się wprost proporcjonalnie do długości geograficznej.
+Na przykład, jeżeli w Lublinie, według strefy czasowej, jest godzina 12:00:00, według położenia geograficznego,
+będzie to 11:30:16. Wywołaj metodę localMeanTime.
+Krok 6.
+W klasie City napisz publiczną statyczną metodę:
+● worstTimezoneFit, tak, aby mogła być użyta jako komparator dwóch miast.
+Wynik sortowania przy użyciu tej metody powinien ustawić na początku kolekcji miasta, których różnica między
+czasem miejscowym a czasem wynikającym ze strefy czasowej jest największa. Wykonaj sortowanie listy obiektów
+City przy użyciu tej metody i wyświetl nazwy miast z posortowanej listy. Poprawna kolejność dla danych z pliku to:
+Madryt, Paryż, Amsterdam, Ateny, Ryga, …, Lima, Rio de Janeiro, Sao Paulo, Kair, Sydney, Osaka.
+Zapoznaj się z plikiem zegar.svg dołączonym do treści zadania.
+Krok 7.
+Napisz klasę AnalogClock, dziedziczącą po Clock. Napisz w niej metodę:
+● toSvg, która przyjmie ścieżkę do pliku i zapisze w nim kod SVG przedstawiający tarczę zegara (bez
+wskazówek).
+Krok 8.
+Napisz klasę abstrakcyjną ClockHand reprezentującą wskazówkę zegara tarczowego. Klasa powinna posiadać
+publiczne, abstrakcyjne metody:
+● setTime, która przyjmuje obiekt LocalTime,
+● toSvg, która zwraca napis zawierający znacznik SVG wskazówki.
+Krok 9.
+Po klasie ClockHand podziedzicz klasę SecondHand - wskazówkę sekundową. Powinna implementować metody
+klasy nadrzędnej:
+● setTime, która ustawia kąt wskazówki dyskretnie (skokowo), na podstawie składowej sekund przekazanego
+czasu,
+● toSvg, która zwraca znacznik SVG przedstawiający wskazówkę jako odcinek o określonej długości, grubości
+i kolorze, obróconą odpowiednią liczbę stopni, wynikającą z ustawionego metodą setTime czasu.
+Kąt w SVG jest reprezentowany za pomocą stopni kątowych, zgodnie z ruchem wskazówek zegara.
+Krok 10.
+Po klasie ClockHand podziedzicz jeszcze dwie klasy: HourHand, MinuteHand implementujące metody klasy
+nadrzędnej:
+● setTime, która ustawia kąt wskazówki na podstawie czasu. Wskazówki powinny poruszać się ruchem
+ciągłym z dokładnością do jednej sekundy,
+● toSvg, analogicznie jak w klasie SecondHand tak, aby wskazówki wizualnie odróżniały się od siebie.
+Krok 11.
+W klasie AnalogClock umieść prywatną, polimorficzną, finalną listę wskazówek, zawierającą po jednej wskazówce
+każdej klasy. Zmodyfikuj metodę toSvg, aby oprócz tarczy, narysowane zostały także wskazówki. Niech ustawienie
+godziny zegara metodami z kroku 1. (setCurrentTime, setTime) powoduje zmianę położenia wskazówek. Zaproponuj
+rozwiązanie, które nie będzie wymagało nadpisywania (overriding) tych dwóch metod.
+Krok 12.
+W klasie City napisz publiczną metodę statyczną generateAnalogClocksSvg, która przyjmie listę obiektów City oraz
+obiekt AnalogClock. Metoda powinna założyć katalog o nazwie będącej wynikiem funkcji toString obiektu zegara.
+W katalogu, dla każdego miasta z listy, należy utworzyć plik SVG o nazwie odpowiadającej nazwie miasta. Pliki
+powinny zawierać wynik działania metody toSvg zegara w kolejnych miastach. Wywołaj tę funkcję.
+
+
+
+
+
+
+
+
+
+
+
+KROK 1: Klasa abstrakcyjna Clock
+java
+Kopiuj
+Edytuj
+import java.time.LocalTime;
+
+public abstract class Clock {
+    protected LocalTime time;
+    private City city;
+
+    public void setCurrentTime() {
+        this.time = LocalTime.now();
+    }
+
+    public void setTime(int hour, int minute, int second) {
+        if (hour < 0 || hour > 23)
+            throw new IllegalArgumentException("Hour must be in range [0, 23]");
+        if (minute < 0 || minute > 59)
+            throw new IllegalArgumentException("Minute must be in range [0, 59]");
+        if (second < 0 || second > 59)
+            throw new IllegalArgumentException("Second must be in range [0, 59]");
+        this.time = LocalTime.of(hour, minute, second);
+    }
+
+    public void setCity(City city) {
+        if (this.city != null) {
+            int diff = city.getZoneOffset() - this.city.getZoneOffset();
+            this.time = this.time.plusHours(diff);
+        }
+        this.city = city;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%02d:%02d:%02d", time.getHour(), time.getMinute(), time.getSecond());
+    }
+}
+✅ KROK 2: Klasa DigitalClock
+java
+Kopiuj
+Edytuj
+public class DigitalClock extends Clock {
+
+    public enum Mode {
+        HOUR_12, HOUR_24
+    }
+
+    private Mode mode;
+
+    public DigitalClock(Mode mode) {
+        this.mode = mode;
+        this.setCurrentTime();
+    }
+
+    @Override
+    public String toString() {
+        if (mode == Mode.HOUR_24) {
+            return super.toString();
+        }
+
+        int hour = time.getHour();
+        String period = hour < 12 ? "AM" : "PM";
+        hour = hour % 12;
+        if (hour == 0) hour = 12;
+
+        return String.format("%d:%02d:%02d %s", hour, time.getMinute(), time.getSecond(), period);
+    }
+}
+✅ KROK 3: Klasa City i parsowanie pliku .csv
+java
+Kopiuj
+Edytuj
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+
+public class City {
+    private final String name;
+    private final int zoneOffset;
+    private final double longitude;
+
+    public City(String name, int zoneOffset, double longitude) {
+        this.name = name;
+        this.zoneOffset = zoneOffset;
+        this.longitude = longitude;
+    }
+
+    public String getName() { return name; }
+    public int getZoneOffset() { return zoneOffset; }
+    public double getLongitude() { return longitude; }
+
+    private static City parseLine(String line) {
+        String[] parts = line.split(",");
+        String name = parts[0].trim();
+        int zone = Integer.parseInt(parts[1].trim());
+        double longitude = Double.parseDouble(parts[2].trim());
+        return new City(name, zone, longitude);
+    }
+
+    public static Map<String, City> parseFile(String path) throws IOException {
+        Map<String, City> map = new HashMap<>();
+        List<String> lines = Files.readAllLines(Paths.get(path));
+        for (String line : lines) {
+            City city = parseLine(line);
+            map.put(city.getName(), city);
+        }
+        return map;
+    }
+}
+✅ KROK 4: Modyfikacja klasy Clock (już zrobiona w kroku 1)
+✅ KROK 5: Lokalny czas średni
+java
+Kopiuj
+Edytuj
+import java.time.LocalTime;
+
+public class City {
+    // ... inne pola i metody
+
+    public LocalTime localMeanTime(LocalTime standardTime) {
+        double offset = (longitude / 180.0) * 12.0; // -180 to +180 → -12 to +12
+        long secondsOffset = Math.round(offset * 3600);
+        return standardTime.plusSeconds(secondsOffset);
+    }
+}
+✅ KROK 6: Komparator worstTimezoneFit
+java
+Kopiuj
+Edytuj
+import java.util.Comparator;
+
+public class City {
+    // ... inne metody
+
+    public static Comparator<City> worstTimezoneFit() {
+        return (c1, c2) -> {
+            double d1 = Math.abs(c1.longitude / 180.0 * 12.0 - c1.zoneOffset);
+            double d2 = Math.abs(c2.longitude / 180.0 * 12.0 - c2.zoneOffset);
+            return Double.compare(d2, d1); // descending
+        };
+    }
+}
+✅ KROK 7: Klasa AnalogClock
+java
+Kopiuj
+Edytuj
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
+
+public class AnalogClock extends Clock {
+    private final List<ClockHand> hands = List.of(new HourHand(), new MinuteHand(), new SecondHand());
+
+    public String toSvg() {
+        StringBuilder svg = new StringBuilder();
+        svg.append("<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'>\n");
+        svg.append("<circle cx='100' cy='100' r='90' stroke='black' stroke-width='3' fill='none'/>\n");
+
+        for (ClockHand hand : hands) {
+            hand.setTime(this.time);
+            svg.append(hand.toSvg()).append("\n");
+        }
+
+        svg.append("</svg>");
+        return svg.toString();
+    }
+
+    public void toSvgFile(String path) throws IOException {
+        try (FileWriter writer = new FileWriter(path)) {
+            writer.write(toSvg());
+        }
+    }
+}
+✅ KROK 8-10: Wskazówki zegara
+Klasa abstrakcyjna ClockHand
+java
+Kopiuj
+Edytuj
+import java.time.LocalTime;
+
+public abstract class ClockHand {
+    protected double angle;
+
+    public abstract void setTime(LocalTime time);
+    public abstract String toSvg();
+}
+Klasa SecondHand
+java
+Kopiuj
+Edytuj
+public class SecondHand extends ClockHand {
+
+    @Override
+    public void setTime(LocalTime time) {
+        this.angle = 6 * time.getSecond(); // 360/60
+    }
+
+    @Override
+    public String toSvg() {
+        return String.format(
+            "<line x1='100' y1='100' x2='100' y2='20' transform='rotate(%.1f 100 100)' stroke='red' stroke-width='1' />",
+            angle);
+    }
+}
+Klasa MinuteHand
+java
+Kopiuj
+Edytuj
+public class MinuteHand extends ClockHand {
+
+    @Override
+    public void setTime(LocalTime time) {
+        this.angle = 6 * (time.getMinute() + time.getSecond() / 60.0);
+    }
+
+    @Override
+    public String toSvg() {
+        return String.format(
+            "<line x1='100' y1='100' x2='100' y2='30' transform='rotate(%.1f 100 100)' stroke='black' stroke-width='2' />",
+            angle);
+    }
+}
+Klasa HourHand
+java
+Kopiuj
+Edytuj
+public class HourHand extends ClockHand {
+
+    @Override
+    public void setTime(LocalTime time) {
+        this.angle = 30 * (time.getHour() % 12 + time.getMinute() / 60.0);
+    }
+
+    @Override
+    public String toSvg() {
+        return String.format(
+            "<line x1='100' y1='100' x2='100' y2='50' transform='rotate(%.1f 100 100)' stroke='black' stroke-width='4' />",
+            angle);
+    }
+}
+✅ KROK 11: Polimorficzna lista już uwzględniona w klasie AnalogClock
+✅ KROK 12: Generowanie wielu SVG
+java
+Kopiuj
+Edytuj
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
+
+public class City {
+    // ...
+
+    public static void generateAnalogClocksSvg(List<City> cities, AnalogClock clock) throws IOException {
+        String dirName = clock.toString().replace(":", "-");
+        File dir = new File(dirName);
+        if (!dir.exists()) dir.mkdir();
+
+        for (City city : cities) {
+            clock.setCity(city);
+            String path = dirName + "/" + city.getName().replace(" ", "_") + ".svg";
+            try (FileWriter writer = new FileWriter(path)) {
+                writer.write(clock.toSvg());
+            }
+        }
+    }
+}
